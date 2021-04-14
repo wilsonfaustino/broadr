@@ -99,12 +99,12 @@ export default function UserList() {
                 </Td>
                 <Td>
                   <Box>
-                    <Text fontWeight="bold">Wilson Faustino</Text>
-                    <Text fontSize="sm">wilson.rfaustino@gmail.com</Text>
+                    <Text fontWeight="bold">Cyro Stanisco</Text>
+                    <Text fontSize="sm">cyro@paintpack.com.br</Text>
                   </Box>
                 </Td>
                 <Td>
-                  <Text>Administrador</Text>
+                  <Text>Gestor</Text>
                 </Td>
                 {isWideVersion && (
                   <Td>
@@ -128,12 +128,12 @@ export default function UserList() {
                 </Td>
                 <Td>
                   <Box>
-                    <Text fontWeight="bold">Wilson Faustino</Text>
-                    <Text fontSize="sm">wilson.rfaustino@gmail.com</Text>
+                    <Text fontWeight="bold">Marcia Sousa</Text>
+                    <Text fontSize="sm">marcia@paintpack.com.br</Text>
                   </Box>
                 </Td>
                 <Td>
-                  <Text>Administrador</Text>
+                  <Text>Gestor</Text>
                 </Td>
                 {isWideVersion && (
                   <Td>
@@ -157,12 +157,12 @@ export default function UserList() {
                 </Td>
                 <Td>
                   <Box>
-                    <Text fontWeight="bold">Wilson Faustino</Text>
-                    <Text fontSize="sm">wilson.rfaustino@gmail.com</Text>
+                    <Text fontWeight="bold">Marcelo Medeiros</Text>
+                    <Text fontSize="sm">marcelo@paintpack.com.br</Text>
                   </Box>
                 </Td>
                 <Td>
-                  <Text>Administrador</Text>
+                  <Text>Operador</Text>
                 </Td>
                 {isWideVersion && (
                   <Td>
