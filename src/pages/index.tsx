@@ -1,10 +1,4 @@
-import {
-  Flex,
-  Button,
-  VStack,
-  SlideFade,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Flex, Button, VStack, useBreakpointValue } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -49,11 +43,10 @@ export default function SignIn() {
       align="center"
       flexDirection={isWideVersion ? 'row' : 'column'}
     >
-      <SlideFade in offsetY="20px">
-        <Flex textAlign="center">
-          <Logo />
-        </Flex>
-      </SlideFade>
+      <Flex textAlign="center">
+        <Logo />
+      </Flex>
+
       <Flex
         as="form"
         w="100%"
