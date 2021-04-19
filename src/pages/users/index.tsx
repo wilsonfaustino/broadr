@@ -6,6 +6,7 @@ import {
   Heading,
   Icon,
   IconButton,
+  Link,
   Spinner,
   Table,
   Tbody,
@@ -16,36 +17,36 @@ import {
   Tr,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import Link from 'next/link';
+import NextLink from 'next/link';
+import { useState } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
-import { useQuery } from 'react-query';
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
+import { api } from '../../services/api';
+import { useUsers } from '../../services/hooks/useUsers';
+import { queryClient } from '../../services/queryClient';
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery('users', async () => {
-    const response = await fetch('http://localhost:3000/api/users');
-    const responseData = await response.json();
-
-    const users = responseData.users.map(user => {
-      return {
-        ...user,
-        createdAt: new Date(user.createdAt).toLocaleString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        }),
-      };
-    });
-
-    return users;
-  });
+  const [page, setPage] = useState(1);
+  const { data, isFetching, isLoading, error } = useUsers(page);
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(
+      ['user', userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
+
+        return response.data;
+      },
+      { staleTime: 1000 * 60 * 10 }, // 10 minutes
+    );
+  }
 
   return (
     <Box>
@@ -58,9 +59,12 @@ export default function UserList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Usuários
+              {!isLoading && isFetching && (
+                <Spinner size="sm" color="gray.500" ml="4" />
+              )}
             </Heading>
 
-            <Link href="/users/create" passHref>
+            <NextLink href="/users/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -70,7 +74,7 @@ export default function UserList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </NextLink>
           </Flex>
           {isLoading ? (
             <Flex justify="center">
@@ -95,131 +99,20 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td px={['4', '4', '6']}>
-                      <Checkbox colorScheme="purple" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Wilson Faustino</Text>
-                        <Text fontSize="sm">wilson.rfaustino@gmail.com</Text>
-                      </Box>
-                    </Td>
-                    <Td>
-                      <Text>Administrador</Text>
-                    </Td>
-                    {isWideVersion && (
-                      <Td>
-                        <Text>14 de Julho, 2014</Text>
-                      </Td>
-                    )}
-                    <Td>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="purple"
-                        aria-label="Editar"
-                        fontSize="20"
-                        borderRadius="full"
-                        icon={<RiPencilLine />}
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td px={['4', '4', '6']}>
-                      <Checkbox colorScheme="purple" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Cyro Stanisco</Text>
-                        <Text fontSize="sm">cyro@paintpack.com.br</Text>
-                      </Box>
-                    </Td>
-                    <Td>
-                      <Text>Gestor</Text>
-                    </Td>
-                    {isWideVersion && (
-                      <Td>
-                        <Text>14 de Julho, 2014</Text>
-                      </Td>
-                    )}
-                    <Td>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="purple"
-                        aria-label="Editar"
-                        fontSize="20"
-                        borderRadius="full"
-                        icon={<RiPencilLine />}
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td px={['4', '4', '6']}>
-                      <Checkbox colorScheme="purple" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Marcia Sousa</Text>
-                        <Text fontSize="sm">marcia@paintpack.com.br</Text>
-                      </Box>
-                    </Td>
-                    <Td>
-                      <Text>Gestor</Text>
-                    </Td>
-                    {isWideVersion && (
-                      <Td>
-                        <Text>14 de Julho, 2014</Text>
-                      </Td>
-                    )}
-                    <Td>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="purple"
-                        aria-label="Editar"
-                        fontSize="20"
-                        borderRadius="full"
-                        icon={<RiPencilLine />}
-                      />
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td px={['4', '4', '6']}>
-                      <Checkbox colorScheme="purple" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Marcelo Medeiros</Text>
-                        <Text fontSize="sm">marcelo@paintpack.com.br</Text>
-                      </Box>
-                    </Td>
-                    <Td>
-                      <Text>Operador</Text>
-                    </Td>
-                    {isWideVersion && (
-                      <Td>
-                        <Text>14 de Julho, 2014</Text>
-                      </Td>
-                    )}
-                    <Td>
-                      <IconButton
-                        variant="ghost"
-                        colorScheme="purple"
-                        aria-label="Editar"
-                        fontSize="20"
-                        borderRadius="full"
-                        icon={<RiPencilLine />}
-                      />
-                    </Td>
-                  </Tr>
-                  {data.map(user => (
+                  {data.users.map(user => (
                     <Tr key={user.id}>
                       <Td px={['4', '4', '6']}>
                         <Checkbox colorScheme="purple" />
                       </Td>
                       <Td>
                         <Box>
-                          <Text fontWeight="bold">{user.name}</Text>
-                          <Text fontSize="sm">user.email</Text>
+                          <Link
+                            color="purple.400"
+                            onMouseEnter={() => handlePrefetchUser(user.id)}
+                          >
+                            <Text fontWeight="bold">{user.name}</Text>
+                          </Link>
+                          <Text fontSize="sm">{user.email}</Text>
                         </Box>
                       </Td>
                       <Td>
@@ -244,7 +137,11 @@ export default function UserList() {
                   ))}
                 </Tbody>
               </Table>
-              <Pagination />
+              <Pagination
+                totalCountOfRecords={data.totalCount}
+                currentPage={page}
+                onPageChange={setPage}
+              />
             </>
           )}
         </Box>
